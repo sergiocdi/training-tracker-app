@@ -58,8 +58,10 @@ import { AuthService } from './core/services/auth.service';
       z-index: 50;
       height: 64px;
       padding: 0 24px;
-      box-shadow: 0 10px 30px rgba(243, 255, 202, 0.05);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      pointer-events: none; /* Allow clicks to pass through to underlying content if needed */
     }
+    .fixed-top-bar > * { pointer-events: auto; } /* Re-enable clicks for items in the bar */
     
     .flex-row-between { display: flex; justify-content: space-between; align-items: center; height: 100%; }
     .flex-row-around { display: flex; justify-content: space-around; align-items: flex-end; }
@@ -100,11 +102,13 @@ import { AuthService } from './core/services/auth.service';
       width: 100%;
       height: 80px;
       padding-bottom: 16px;
-      z-index: 50;
+      z-index: 100;
       border-top-left-radius: var(--radius-xl);
       border-top-right-radius: var(--radius-xl);
-      box-shadow: 0 -8px 30px rgba(0,0,0,0.12);
+      box-shadow: 0 -8px 30px rgba(0,0,0,0.3);
+      pointer-events: none;
     }
+    .bottom-nav > * { pointer-events: auto; }
     
     .nav-item {
       display: flex;

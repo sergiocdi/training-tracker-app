@@ -79,9 +79,11 @@ h1, h2, h3, h4, h5, h6, .font-lexend {
 
 /* Glassmorphism navs */
 .glass-panel {
-  background: var(--bg-surface-bright);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: rgba(12, 19, 34, 0.8) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border-bottom: 1px solid var(--border-color);
+  pointer-events: auto !important;
 }
 
 .btn-primary {
