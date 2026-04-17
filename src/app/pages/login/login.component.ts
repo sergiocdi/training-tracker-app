@@ -11,8 +11,13 @@ import { AuthService } from '../../core/services/auth.service';
   template: `
     <div class="auth-container">
       <div class="auth-header">
-        <h1 class="page-title">Welcome<br><span class="text-accent">Back</span></h1>
-        <p class="text-secondary">Sign in to track your trainings.</p>
+        <h1 class="page-title text-center" style="font-size: 3.5rem;">
+          WELCOME<br>
+          <span class="text-accent">BACK</span>
+        </h1>
+        <p class="text-secondary text-center" style="letter-spacing: 0.1em; text-transform: uppercase; font-size: 0.8rem; margin-top: 16px;">
+          Sign in to track your performance
+        </p>
       </div>
 
       <div class="glass-card auth-card">
@@ -20,7 +25,7 @@ import { AuthService } from '../../core/services/auth.service';
           
           <div class="form-group">
             <label class="form-label">Email</label>
-            <input type="email" class="form-control" formControlName="email" placeholder="you@example.com">
+            <input type="email" class="form-control" formControlName="email" placeholder="athlete@velocity.app">
           </div>
 
           <div class="form-group">
@@ -29,58 +34,35 @@ import { AuthService } from '../../core/services/auth.service';
           </div>
 
           <div *ngIf="errorMsg" class="error-msg">
+            <span class="material-symbols-outlined">error</span>
             {{ errorMsg }}
           </div>
 
           <button type="submit" class="btn-primary w-100" [disabled]="loginForm.invalid || loading">
-            {{ loading ? 'Signing in...' : 'Sign In' }}
+            {{ loading ? 'Authenticating...' : 'Sign In' }}
           </button>
         </form>
 
         <div class="auth-footer">
-          <p class="text-muted">Don't have an account? <a routerLink="/register" class="text-accent text-decoration-none">Sign up</a></p>
+          <p class="text-muted">Don't have an account? <a routerLink="/register" class="text-accent text-decoration-none">Join Velocity</a></p>
         </div>
       </div>
     </div>
   `,
   styles: [`
-    .auth-container {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      min-height: 80vh;
-    }
-    .auth-header {
-      margin-bottom: 32px;
-    }
-    .auth-card {
-      padding: 32px 24px;
-    }
-    .w-100 {
-      width: 100%;
-      margin-top: 16px;
-    }
+    .auth-container { display: flex; flex-direction: column; justify-content: center; min-height: 80vh; }
+    .text-center { text-align: center; }
+    .auth-header { margin-bottom: 40px; }
+    .auth-card { padding: 40px 24px; border-radius: var(--radius-xl); }
+    .w-100 { width: 100%; margin-top: 32px; }
     .error-msg {
-      color: var(--danger);
-      font-size: 14px;
-      margin-bottom: 16px;
-      background: var(--danger-faded);
-      padding: 10px;
-      border-radius: var(--radius-sm);
+      color: var(--danger); font-size: 14px; margin-bottom: 24px; 
+      background: var(--danger-faded); padding: 12px; border-radius: var(--radius-sm);
+      display: flex; align-items: center; gap: 8px; font-weight: 500;
     }
-    .auth-footer {
-      margin-top: 24px;
-      text-align: center;
-      font-size: 14px;
-    }
-    .text-decoration-none {
-      text-decoration: none;
-      font-weight: 500;
-      transition: color 0.2s;
-    }
-    .text-decoration-none:hover {
-      color: var(--text-primary);
-    }
+    .auth-footer { margin-top: 32px; text-align: center; font-size: 0.9rem; }
+    .text-decoration-none { text-decoration: none; font-weight: 700; transition: color 0.2s; letter-spacing: 0.05em; }
+    .text-decoration-none:hover { color: var(--text-primary); text-shadow: var(--shadow-neon); }
   `]
 })
 export class LoginComponent {

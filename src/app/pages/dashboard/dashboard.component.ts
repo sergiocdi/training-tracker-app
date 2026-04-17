@@ -1,7 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { Chart, ChartConfiguration } from 'chart.js/auto';
 import { AuthService } from '../../core/services/auth.service';
 import { SessionsService } from '../../core/services/sessions.service';
 import { SettingsService } from '../../core/services/settings.service';
@@ -12,69 +11,130 @@ import { TrainingSession, UserSettings } from '../../shared/models/models';
   standalone: true,
   imports: [CommonModule, RouterLink],
   template: `
-    <div class="header-row">
+    <div class="header-row" style="margin-bottom: 24px;">
       <div>
-        <h1 class="page-title" style="margin-bottom: 4px;">Hello, Friend</h1>
-        <p class="text-secondary">Ready to work out?</p>
+        <h1 class="page-title" style="margin-bottom: 0;">Hello, Athlete.</h1>
+        <p class="text-secondary" style="font-weight: 500;">Ready to crush your goals?</p>
       </div>
-      <button class="btn-icon" (click)="logout()" title="Logout">
-        <span class="material-icons">logout</span>
+      <button class="btn-icon" (click)="logout()" title="Logout" style="border: none;">
+        <span class="material-symbols-outlined">logout</span>
       </button>
     </div>
 
     <!-- Score Circular Card -->
-    <div class="glass-card score-card" style="text-align: center; margin-bottom: 24px;">
-      <h3 class="text-secondary" style="margin-bottom: 16px;">Wellness Score</h3>
-      
-      <div class="score-circle-container">
-         <canvas id="scoreChart"></canvas>
-         <div class="score-value">
-            <h2>{{ score }}%</h2>
-         </div>
+    <div class="glass-card score-hero">
+      <div class="score-circle-wrapper">
+        <svg viewBox="0 0 36 36" class="circular-chart">
+          <path class="circle-bg"
+            d="M18 2.0845
+              a 15.9155 15.9155 0 0 1 0 31.831
+              a 15.9155 15.9155 0 0 1 0 -31.831"
+          />
+          <path class="circle-fg"
+            [attr.stroke-dasharray]="score + ', 100'"
+            d="M18 2.0845
+              a 15.9155 15.9155 0 0 1 0 31.831
+              a 15.9155 15.9155 0 0 1 0 -31.831"
+          />
+        </svg>
+        <div class="score-content">
+          <span class="score-label">WELLNESS SCORE</span>
+          <h2 class="score-value">{{ score }}</h2>
+        </div>
       </div>
       
-      <p class="motivational-quote text-accent" style="margin-top: 16px; font-weight: 500;">
-        {{ motivationalQuote }}
-      </p>
+      <p class="motivational-quote text-accent">{{ motivationalQuote }}</p>
     </div>
 
     <!-- Metrics Cards -->
     <div class="metrics-grid">
       <div class="glass-card metric-card">
-        <div class="metric-icon"><span class="material-icons">directions_run</span></div>
+        <div class="metric-icon-wrap">
+           <span class="material-symbols-outlined">exercise</span>
+        </div>
         <div class="metric-info">
           <h4>Sessions</h4>
-          <p class="text-muted">{{ weekSessions }} / {{ settings?.weekly_sessions_goal }}</p>
+          <div class="metric-value">
+             <span class="current">{{ weekSessions }}</span>
+             <span class="goal">/ {{ settings?.weekly_sessions_goal }}</span>
+          </div>
         </div>
       </div>
       
       <div class="glass-card metric-card">
-        <div class="metric-icon"><span class="material-icons">timer</span></div>
+        <div class="metric-icon-wrap" style="color: var(--secondary); background: var(--danger-faded);">
+           <span class="material-symbols-outlined">timer</span>
+        </div>
         <div class="metric-info">
           <h4>Minutes</h4>
-          <p class="text-muted">{{ weekMinutes }} / {{ settings?.weekly_minutes_goal }}</p>
+          <div class="metric-value">
+             <span class="current">{{ weekMinutes }}</span>
+             <span class="goal">/ {{ settings?.weekly_minutes_goal }}</span>
+          </div>
         </div>
       </div>
     </div>
-
-    <button class="btn-primary w-100" style="margin-top: 24px; padding: 18px; font-size: 18px;" routerLink="/add-session">
-      <span class="material-icons">add</span> Add New Session
-    </button>
   `,
   styles: [`
-    .score-card { position: relative; }
-    .score-circle-container {
-      position: relative;
-      width: 180px;
-      height: 180px;
-      margin: 0 auto;
+    .score-hero {
+      text-align: center;
+      margin-bottom: 24px;
+      padding: 32px 24px;
+      background: linear-gradient(180deg, var(--bg-surface-elevated) 0%, var(--bg-surface) 100%);
     }
-    .score-value {
+    .score-circle-wrapper {
+      position: relative;
+      max-width: 220px;
+      margin: 0 auto 24px;
+    }
+    .circular-chart {
+      display: block;
+      margin: 0 auto;
+      max-width: 100%;
+      max-height: 250px;
+      filter: drop-shadow(0 0 12px rgba(243, 255, 202, 0.2));
+    }
+    .circle-bg {
+      fill: none;
+      stroke: var(--bg-surface-elevated);
+      stroke-width: 2;
+    }
+    .circle-fg {
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 2;
+      stroke-linecap: round;
+      transition: stroke-dasharray 1s ease-out;
+    }
+    .score-content {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      h2 { font-size: 36px; font-weight: 700; color: var(--text-primary); }
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .score-label {
+      font-size: 0.65rem;
+      font-family: 'Lexend', sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+    .score-value {
+      font-family: 'Lexend', sans-serif;
+      font-size: 4rem;
+      font-weight: 900;
+      line-height: 1;
+      color: var(--text-primary);
+    }
+    .motivational-quote {
+      font-family: 'Lexend', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
     }
     .metrics-grid {
       display: grid;
@@ -83,23 +143,30 @@ import { TrainingSession, UserSettings } from '../../shared/models/models';
     }
     .metric-card {
       display: flex;
-      align-items: center;
+      flex-direction: column;
+      padding: 20px;
       gap: 12px;
-      padding: 16px;
     }
-    .metric-icon {
+    .metric-icon-wrap {
       background: var(--accent-faded);
       color: var(--accent);
-      width: 40px;
-      height: 40px;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
     }
-    .metric-info h4 { font-size: 14px; margin-bottom: 4px;}
-    .metric-info p { font-size: 13px; margin: 0; }
-    .w-100 { width: 100%; }
+    .metric-info h4 {
+      font-family: 'Lexend', sans-serif;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+    .metric-value .current { font-size: 1.5rem; font-weight: 900; color: var(--text-primary); font-family: 'Lexend', sans-serif;}
+    .metric-value .goal { font-size: 0.9rem; font-weight: 500; color: var(--text-muted); }
   `]
 })
 export class DashboardComponent implements OnInit {
@@ -113,12 +180,9 @@ export class DashboardComponent implements OnInit {
   score = 0;
   motivationalQuote = '';
 
-  private chart: Chart | null = null;
-
   async ngOnInit() {
     this.settings = await this.settingsService.getSettings();
     await this.calculateWeeklyStats();
-    this.initChart();
   }
 
   async calculateWeeklyStats() {
@@ -162,42 +226,11 @@ export class DashboardComponent implements OnInit {
   }
 
   getQuote(score: number): string {
-    if (score === 0) return "Hoy es un buen día para empezar: una sesión cuenta.";
-    if (score < 40) return "Pequeños pasos, gran progreso.";
-    if (score < 70) return "Vas en camino: intenta sumar una sesión más.";
-    if (score < 90) return "Constancia excelente, sigue así.";
-    return "Semana top: tu cuerpo te lo agradece.";
-  }
-
-  initChart() {
-    const ctx = document.getElementById('scoreChart') as HTMLCanvasElement;
-    if (this.chart) this.chart.destroy();
-    
-    const remainder = 100 - this.score;
-
-    this.chart = new Chart(ctx, {
-      type: 'doughnut',
-      data: {
-        datasets: [{
-          data: [this.score, remainder],
-          backgroundColor: [
-            '#AAFF00', // accent
-            'rgba(255, 255, 255, 0.05)'
-          ],
-          borderWidth: 0,
-          borderRadius: 10
-        }]
-      },
-      options: {
-        cutout: '80%',
-        responsive: true,
-        plugins: { tooltip: { enabled: false } },
-        animation: {
-          animateScale: true,
-          animateRotate: true
-        }
-      }
-    });
+    if (score === 0) return "Ready to start? One session counts.";
+    if (score < 40) return "Small steps, big progress.";
+    if (score < 70) return "You're getting there. Keep going!";
+    if (score < 90) return "Excellent consistency, keep it up!";
+    return "Top performance. Your body thanks you.";
   }
 
   async logout() {

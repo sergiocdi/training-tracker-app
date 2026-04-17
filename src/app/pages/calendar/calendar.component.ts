@@ -8,20 +8,20 @@ import { TrainingSession } from '../../shared/models/models';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="header-row">
-      <h1 class="page-title" style="margin-bottom: 0;">{{ currentMonthName }}</h1>
-      <div>
-         <button class="icon-btn" (click)="addMonth(-1)"><span class="material-icons">chevron_left</span></button>
-         <button class="icon-btn" (click)="addMonth(1)"><span class="material-icons">chevron_right</span></button>
+    <div class="header-row" style="margin-bottom: 32px;">
+      <h1 class="page-title text-transform:uppercase;">{{ currentMonthName }}<span class="text-accent">.</span></h1>
+      <div style="display:flex; gap:8px;">
+         <button class="icon-btn" style="border:1px solid var(--border-color); background:var(--bg-surface); padding:8px; border-radius:50%;" (click)="addMonth(-1)"><span class="material-symbols-outlined">chevron_left</span></button>
+         <button class="icon-btn" style="border:1px solid var(--border-color); background:var(--bg-surface); padding:8px; border-radius:50%;" (click)="addMonth(1)"><span class="material-symbols-outlined">chevron_right</span></button>
       </div>
     </div>
 
-    <div class="glass-card" style="padding: 16px;">
+    <div class="glass-card calendar-card" style="padding: 24px;">
       <div class="calendar-grid days-header">
-         <div *ngFor="let day of ['Mon','Tue','Wed','Thu','Fri','Sat','Sun']">{{ day }}</div>
+         <div *ngFor="let day of ['Mon','Tue','Wed','Thu','Fri','Sat','Sun']">{{ day | slice:0:1 }}</div>
       </div>
       <div class="calendar-grid">
-         <div *ngFor="let d of emptyDays"></div>
+         <div *ngFor="let d of emptyDays" class="empty-cell"></div>
          <div *ngFor="let day of monthDays" 
               class="calendar-day" 
               [class.has-session]="hasSession(day)"
@@ -32,24 +32,33 @@ import { TrainingSession } from '../../shared/models/models';
       </div>
     </div>
     
-    <div style="margin-top: 24px;" *ngIf="sessionsThisMonth.length > 0">
-       <h3 class="text-secondary" style="margin-bottom: 16px;">Summary</h3>
-       <p class="text-muted">{{ sessionsThisMonth.length }} sessions this month.</p>
+    <div class="glass-card" style="margin-top: 24px;" *ngIf="sessionsThisMonth.length > 0">
+       <div style="display:flex; justify-content:space-between; align-items:center;">
+         <h3 class="text-secondary font-lexend" style="margin: 0; font-size:1.1rem; letter-spacing: 0.1em;">MONTH SUMMARY</h3>
+         <h2 class="text-accent font-lexend" style="margin:0; font-size: 2.5rem; line-height: 1;">{{ sessionsThisMonth.length }}</h2>
+       </div>
     </div>
   `,
   styles: [`
-    .icon-btn { background: transparent; border: none; color: var(--text-primary); cursor: pointer; }
+    .icon-btn { color: var(--text-primary); cursor: pointer; display:flex; align-items:center; justify-content:center; transition:0.2s;}
+    .icon-btn:hover { background: var(--bg-surface-elevated); color: var(--accent); }
     .calendar-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 8px;
+      gap: 12px;
       text-align: center;
     }
     .days-header {
-      font-size: 12px;
+      font-size: 0.8rem;
+      font-family: 'Lexend', sans-serif;
       color: var(--text-muted);
-      margin-bottom: 12px;
-      font-weight: 600;
+      margin-bottom: 16px;
+      font-weight: 700;
+    }
+    .empty-cell {
+      border: 1px dashed var(--border-color);
+      border-radius: var(--radius-sm);
+      opacity: 0.3;
     }
     .calendar-day {
       aspect-ratio: 1;
@@ -58,15 +67,19 @@ import { TrainingSession } from '../../shared/models/models';
       align-items: center;
       justify-content: center;
       border-radius: var(--radius-sm);
-      background: var(--bg-surface);
+      background: var(--bg-surface-elevated);
       position: relative;
+      transition: all 0.3s ease;
+      cursor: pointer;
     }
+    .calendar-day:hover { background: var(--bg-surface-bright); transform: scale(1.05); }
     .calendar-day.today {
-      border: 1px solid var(--accent);
+      border: 2px solid var(--secondary);
     }
+    .day-num { font-family: 'Lexend', sans-serif; font-weight: 600; font-size: 1rem; }
     .calendar-day.has-session .day-num {
       color: var(--accent);
-      font-weight: 600;
+      font-weight: 900;
     }
     .dot {
       width: 6px;
@@ -75,6 +88,7 @@ import { TrainingSession } from '../../shared/models/models';
       border-radius: 50%;
       position: absolute;
       bottom: 6px;
+      box-shadow: var(--shadow-neon);
     }
   `]
 })
