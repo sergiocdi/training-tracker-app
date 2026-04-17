@@ -8,46 +8,46 @@ import { AuthService } from './core/services/auth.service';
   standalone: true,
   imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive],
   template: `
-    <div class="app-container">
-      <!-- TopAppBar -->
-      <header class="fixed-top-bar glass-panel flex-row-between" *ngIf="auth.currentUser()">
-        <div class="brand-row">
-          <div class="avatar-ph"></div>
-          <span class="brand-text">Velocity</span>
-        </div>
-        <button class="bolt-btn">
-          <span class="material-symbols-outlined">bolt</span>
-        </button>
-      </header>
+    <!-- TopAppBar -->
+    <header class="fixed-top-bar glass-panel flex-row-between" *ngIf="auth.currentUser()">
+      <div class="brand-row">
+        <div class="avatar-ph"></div>
+        <span class="brand-text">Velocity</span>
+      </div>
+      <button class="bolt-btn">
+        <span class="material-symbols-outlined">bolt</span>
+      </button>
+    </header>
 
+    <div class="app-container">
       <main class="page-content">
         <router-outlet></router-outlet>
       </main>
-
-      <!-- Bottom Navigation -->
-      <nav class="bottom-nav glass-panel flex-row-around" *ngIf="auth.currentUser()">
-        <a routerLink="/dashboard" routerLinkActive="active" class="nav-item">
-          <span class="material-symbols-outlined">dashboard</span>
-          <span class="nav-label">Dashboard</span>
-        </a>
-        <a routerLink="/add-session" routerLinkActive="active" class="nav-item main-action">
-          <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_circle</span>
-          <span class="nav-label">Log</span>
-        </a>
-        <a routerLink="/history" routerLinkActive="active" class="nav-item">
-          <span class="material-symbols-outlined">calendar_month</span>
-          <span class="nav-label">History</span>
-        </a>
-        <a routerLink="/stats" routerLinkActive="active" class="nav-item">
-          <span class="material-symbols-outlined">leaderboard</span>
-          <span class="nav-label">Stats</span>
-        </a>
-        <a routerLink="/settings" routerLinkActive="active" class="nav-item">
-          <span class="material-symbols-outlined">settings</span>
-          <span class="nav-label">Settings</span>
-        </a>
-      </nav>
     </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav glass-panel flex-row-around" *ngIf="auth.currentUser()">
+      <a routerLink="/dashboard" routerLinkActive="active" class="nav-item">
+        <span class="material-symbols-outlined">dashboard</span>
+        <span class="nav-label">Dashboard</span>
+      </a>
+      <a routerLink="/add-session" routerLinkActive="active" class="nav-item main-action">
+        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_circle</span>
+        <span class="nav-label">Log</span>
+      </a>
+      <a routerLink="/history" routerLinkActive="active" class="nav-item">
+        <span class="material-symbols-outlined">calendar_month</span>
+        <span class="nav-label">History</span>
+      </a>
+      <a routerLink="/stats" routerLinkActive="active" class="nav-item">
+        <span class="material-symbols-outlined">leaderboard</span>
+        <span class="nav-label">Stats</span>
+      </a>
+      <a routerLink="/settings" routerLinkActive="active" class="nav-item">
+        <span class="material-symbols-outlined">settings</span>
+        <span class="nav-label">Settings</span>
+      </a>
+    </nav>
   `,
   styles: [`
     .fixed-top-bar {
@@ -56,12 +56,13 @@ import { AuthService } from './core/services/auth.service';
       left: 0;
       width: 100%;
       z-index: 50;
-      height: 64px;
+      height: 64px !important;
+      max-height: 64px !important;
+      overflow: hidden;
       padding: 0 24px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-      pointer-events: none; /* Allow clicks to pass through to underlying content if needed */
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      pointer-events: auto; 
     }
-    .fixed-top-bar > * { pointer-events: auto; } /* Re-enable clicks for items in the bar */
     
     .flex-row-between { display: flex; justify-content: space-between; align-items: center; height: 100%; }
     .flex-row-around { display: flex; justify-content: space-around; align-items: flex-end; }
